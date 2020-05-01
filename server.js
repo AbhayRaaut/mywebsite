@@ -5,6 +5,7 @@ var developernamedefault = "Abhay Raut";
 var developercountrydefault = "Nepal";
 var bodyParser = require('body-parser');
 var path = require('path');
+var nodemailer = require("nodemailer")
 
 //create handlebars with default layout
 var handlebars = require('express-handlebars')
@@ -25,8 +26,34 @@ app.get('/',function(req,res){
     });
 });
 app.post('/contact',function(req,res){
-        console.log(req.body);  //prints all the form contents to console log we can use this data to store in data base
-        res.render('contact');
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'personalwebsitear@gmail.com',
+          pass: 'personalwebsitear3000+'
+        }
+      });
+      
+      var mailOptions = {
+        from: 'personalwebsitear@gmail.com',
+        to: 'abhayraut712@gmail.com',
+        subject: req.body.subject,
+        text: 'Hey! I am '+req.body.name+'.\n'+req.body.message+'\nMy gmail id is: '+req.body.email
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            app.use(function(req,res){
+                res.status(404);
+                res.render('404');
+            });
+            
+        }else{
+           res.render('contact'); 
+        }
+      });
+        // console.log(req.body.name);  //prints all the form contents to console log we can use this data to store in data base
+        // res.render('contact');
     });
 
 //need declare handle error http here (after get post put actions etc)
