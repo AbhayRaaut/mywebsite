@@ -6,6 +6,7 @@ var developercountrydefault = "Nepal";
 var bodyParser = require('body-parser');
 var path = require('path');
 var nodemailer = require("nodemailer")
+var fs = require("fs")
 
 //create handlebars with default layout
 var handlebars = require('express-handlebars')
@@ -25,6 +26,7 @@ app.get('/',function(req,res){
         developercountry : developercountrydefault
     });
 });
+
 app.post('/contact',function(req,res){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -54,6 +56,21 @@ app.post('/contact',function(req,res){
       });
         // console.log(req.body.name);  //prints all the form contents to console log we can use this data to store in data base
         // res.render('contact');
+    });
+
+    app.get('/cv', function (req, res) {
+        function fileExist(fullpath) {
+            try {
+                return fs.statSync(fullpath).isFile();
+            } catch (e) {
+                return false;
+            }
+         }
+        
+        
+        var name = 'Abhay_Raut_CV.pdf';
+        var filePath = path.join(__dirname,name);
+        res.download(filePath, name);
     });
 
 //need declare handle error http here (after get post put actions etc)
