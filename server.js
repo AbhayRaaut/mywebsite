@@ -58,6 +58,7 @@ app.post('/contact',function(req,res){
         // res.render('contact');
     });
 
+    
     app.get('/cv', function (req, res) {
         function fileExist(fullpath) {
             try {
@@ -72,6 +73,7 @@ app.post('/contact',function(req,res){
         var filePath = path.join(__dirname,name);
         res.download(filePath, name);
     });
+
 
 //need declare handle error http here (after get post put actions etc)
 //404 not found
